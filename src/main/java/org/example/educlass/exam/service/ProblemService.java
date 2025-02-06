@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public final class ProblemService {
+public class ProblemService {
 
     private final ProblemRepository problemRepository;
 
@@ -41,9 +41,12 @@ public final class ProblemService {
         Problem problem = problemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
 
-        problem.update(request.getContent(), request.getContent(), request.getChapter());
-
+        problem.update(request.getContent(), request.getAnswer(), request.getChapter());
         return problem;
     }
 
+    // 문제 삭제 메소드
+    public void delete(Long id) {
+        problemRepository.deleteById(id);
+    }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class ProblemController {
+public class ProblemApiController {
 
     private final ProblemService problemService;
 
@@ -39,11 +39,15 @@ public class ProblemController {
     }
 
     @PutMapping("/api/problem/{id}")
-    public ResponseEntity<Problem> updateProblem(@PathVariable Long id, @RequestBody ProblemRequest problemRequest) {
-        Problem problem = problemService.update(id, problemRequest);
+    public ResponseEntity<ProblemResponse> updateProblem(@PathVariable Long id, @RequestBody ProblemRequest problemRequest) {
+        Problem updatedProblem = problemService.update(id, problemRequest);
+        return ResponseEntity.ok(new ProblemResponse(updatedProblem));
+    }
 
-        return ResponseEntity.ok()
-                .body(problem);
+    @DeleteMapping("/api/problem/{id}")
+    public ResponseEntity<Void> deleteProblem(@PathVariable Long id) {
+        problemService.delete(id);
 
+        return ResponseEntity.ok().build();
     }
 }

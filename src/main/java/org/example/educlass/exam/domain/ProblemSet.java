@@ -27,6 +27,9 @@ public class ProblemSet {
     private int problemCount;
 
     @Column(nullable = false)
+    private Long chapter;
+
+    @Column(nullable = false)
     private int score;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
