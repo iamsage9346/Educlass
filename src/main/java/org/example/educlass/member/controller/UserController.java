@@ -1,4 +1,4 @@
-package org.example.educlass.controller;
+package org.example.educlass.member.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
