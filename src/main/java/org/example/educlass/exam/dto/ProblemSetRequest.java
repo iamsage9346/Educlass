@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProblemSetRequest {
+
     private Long testId;
     private Long chapterId;
 }

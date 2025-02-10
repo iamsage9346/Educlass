@@ -1,6 +1,7 @@
 package org.example.educlass.lecture.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,10 +28,6 @@ public class Lecture {
     @Column(nullable = false)
     private int progress;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private YesNo isStart;
-
     @Column(nullable = false)
     private int chapter;
 
@@ -39,4 +36,20 @@ public class Lecture {
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Test> tests;
+
+    @Builder
+    public Lecture(String name, String link, int chapter, int grade) {
+        this.name = name;
+        this.chapter = chapter;
+        this.link = link;
+        this.grade = grade;
+    }
+
+    public void update(String name, String link, int chapter, int grade) {
+        this.name = name;
+        this.link = link;
+        this.chapter = chapter;
+        this.grade = grade;
+    }
+
 }

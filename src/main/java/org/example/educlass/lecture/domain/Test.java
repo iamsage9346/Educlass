@@ -1,12 +1,22 @@
 package org.example.educlass.lecture.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.educlass.exam.domain.ProblemSet;
 
-import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -24,19 +34,12 @@ public class Test {
     @JoinColumn(name = "lecture_id", nullable = false)
     private Lecture lecture;
 
-    @Column(nullable = false)
-    private LocalDateTime initime;
-
-    @Column(nullable = false)
-    private LocalDateTime finaltime;
-
-    @Column(nullable = false)
-    private int problemCount;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private YesNo status;
-
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProblemSet> problemSets;
+
+    @Builder
+    public Test(Lecture lecture, ProblemSet problemSet) {
+        this.lecture = lecture;
+        this.problemSets = Collections.singletonList(problemSet);
+    }
 }
