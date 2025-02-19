@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Builder;
 import org.example.educlass.BaseTimeEntity;
 
 
@@ -30,6 +31,13 @@ public class Problem extends BaseTimeEntity {
 
     @Column(nullable = false)
     private int chapter;
+
+    @Builder
+    public Problem(String content, String answer, int chapter) {
+        this.content = content;
+        this.answer = answer;
+        this.chapter = chapter;
+    }
 
     public void update(String content, String answer, int chapter) {
         this.content = content;
