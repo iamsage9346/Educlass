@@ -14,8 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.educlass.lecture.domain.Lecture;
-import org.example.educlass.lecture.domain.StudentTest;
+import org.example.educlass.exam.domain.StudentTest;
 
 import java.util.List;
 
@@ -43,6 +42,6 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StudentTest> studentTests;  // 학생이 응시한 시험 목록
 
-    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lecture> lectures;  // 학생이 응시한 시험 목록
+//    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Lecture> lectures;  // 학생이 응시한 시험 목록
 }
