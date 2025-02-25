@@ -2,9 +2,9 @@ package org.example.educlass.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.member.domain.Student;
-import org.example.educlass.member.domain.User;
 import org.example.educlass.member.domain.Usertype;
 import org.example.educlass.member.dto.AddStudentRequest;
+import org.example.educlass.member.dto.AddUserRequest;
 import org.example.educlass.member.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +16,17 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public Student createStudent(User user, AddStudentRequest addStudentRequest) {
-        if (user.getUsertype() != Usertype.STUDENT) {
+    public Student createStudent(AddUserRequest addUserRequest, AddStudentRequest addStudentRequest) {
+        if (addUserRequest.getUsertype() != Usertype.STUDENT) {
             throw new IllegalArgumentException("해당 유저는 학생이 아닙니다.");
         }
         Student student = studentRepository.save(addStudentRequest.toEntity());
-        student.setUser(user);
+        student.setUser(addUserRequest.toEntity());
 
         return student;
     }
 
-    public List<Student> getAllStudents() {
+    public List<Student> findAllStudents() {
 
         return studentRepository.findAll();
     }
@@ -43,5 +43,11 @@ public class StudentService {
         student.updateStudent(addStudentRequest.toEntity());
 
         return student;
+    }
+
+    public void deleteStudentById(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
+        studentRepository.delete(student);
     }
 }
