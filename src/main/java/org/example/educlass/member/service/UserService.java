@@ -1,46 +1,49 @@
 package org.example.educlass.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.educlass.member.domain.Authorization;
-import org.example.educlass.member.domain.Certification;
 import org.example.educlass.member.domain.User;
 import org.example.educlass.member.dto.AddUserRequest;
-import org.example.educlass.member.repository.AuthorizationRepository;
-import org.example.educlass.member.repository.CertificationRepository;
 import org.example.educlass.member.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AuthorizationRepository authorizationRepository;
-    private final CertificationRepository certificationRepository;
 
     @Transactional
-    public Long save(AddUserRequest dto) {
-        User user = User.builder()
-                .name(dto.getName())
-                .phone(dto.getPhone())
-                .type(dto.getType())
-                .build();
-        userRepository.save(user);
+    public User createUser(AddUserRequest addUserRequest) {
+        // 중복 체크
+        if(userRepository.findByPhone(addUserRequest.getPhone()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 연락처로 가입되었습니다.");
+        }
 
-        Certification certification = Certification.builder()
-                .user(user)
-                .email(dto.getEmail())
-                .password(dto.getPassword())
-                .build();
-        certificationRepository.save(certification);
+        return addUserRequest.toEntity();
 
-        Authorization authorization = Authorization.builder()
-                .user(user)
-                .role(dto.getType())
-                .build();
-        authorizationRepository.save(authorization);
-
-        return user.getId();
     }
+
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
+    }
+
+    public List<User> findAllUser() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(Long id, AddUserRequest addUserRequest) {
+
+        User user = findUserById(id);
+        user.updateUser(addUserRequest.getEmail(), addUserRequest.getPassword());
+
+        return user;
+    }
+
 }

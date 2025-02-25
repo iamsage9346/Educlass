@@ -31,8 +31,7 @@ public class ProblemService {
 
     @Transactional
     public Problem updateProblem(Long id, ProblemRequest request) {
-        Problem problem = problemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
+        Problem problem = findByIdProblem(id);
 
         problem.update(request.getContent(), request.getAnswer(), request.getChapter());
 
