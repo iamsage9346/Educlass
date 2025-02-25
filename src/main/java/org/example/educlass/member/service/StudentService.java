@@ -1,7 +1,6 @@
 package org.example.educlass.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.educlass.ProblemSet.domain.Problem;
 import org.example.educlass.member.domain.Student;
 import org.example.educlass.member.domain.User;
 import org.example.educlass.member.domain.Usertype;
@@ -41,6 +40,8 @@ public class StudentService {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
 
-        student
+        student.updateStudent(addStudentRequest.toEntity());
+
+        return student;
     }
 }
