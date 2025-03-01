@@ -26,9 +26,6 @@ public class Lecture {
     private String link;
 
     @Column(nullable = false)
-    private int progress;
-
-    @Column(nullable = false)
     private int chapter;
 
     @Column(nullable = false)

@@ -7,9 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,16 +28,16 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
+    @Column(nullable = false, length = 100)
+    private String name;
 
-    // 학년
+    @Column(nullable = false, length = 100, unique = true)
+    private String phone;
+
     @Column(nullable = false)
     private int grade;
 
-    // 반
-    @Column(nullable = false)
+    @Column(name="class_num", nullable = false)
     private int classNum;
 
     @Column(nullable = false)
@@ -52,15 +50,17 @@ public class Student {
 //    private List<Lecture> lectures;  // 학생이 응시한 시험 목록
 
     @Builder
-    public Student(User user, int grade, int classNum, int gender) {
-        this.user = user;
+    public Student(String name, String phone, int grade, int classNum, int gender) {
+        this.name = name;
+        this.phone = phone;
         this.grade = grade;
         this.classNum = classNum;
         this.gender = gender;
     }
 
     public void updateStudent(Student student) {
-        this.user = student.getUser();
+        this.name = student.getName();
+        this.phone = student.getPhone();
         this.grade = student.getGrade();
         this.classNum = student.getClassNum();
         this.gender = student.getGender();

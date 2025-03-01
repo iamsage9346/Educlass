@@ -1,17 +1,22 @@
 package org.example.educlass.member.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.example.educlass.member.domain.Student;
 
 @Getter
-public class StudentListViewResponse {
-    private final String name;
-    private final String phone;
-    private final int grade;
-    private final int classNum;
-    private final int gender;
+@Setter
+public class StudentViewResponse {
 
-    public StudentListViewResponse(Student student) {
+    private Long id;
+    private String name;
+    private String phone;
+    private int grade;
+    private int classNum;
+    private int gender;
+
+    public StudentViewResponse(Student student) {
+        this.id = student.getId();
         this.name = student.getName();
         this.phone = student.getPhone();
         this.grade = student.getGrade();

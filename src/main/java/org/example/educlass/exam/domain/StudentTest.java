@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,4 +47,12 @@ public class StudentTest extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "problem_set_id")
     private ProblemSet problemSet;
+
+    @Builder
+    public StudentTest(Student student, Test test, int score, boolean completed) {
+        this.student = student;
+        this.test = test;
+        this.score = score;
+        this.completed = completed;
+    }
 }

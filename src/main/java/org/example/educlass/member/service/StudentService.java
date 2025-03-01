@@ -1,10 +1,9 @@
 package org.example.educlass.member.service;
 
+import jakarta.persistence.Column;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.member.domain.Student;
-import org.example.educlass.member.domain.Usertype;
 import org.example.educlass.member.dto.AddStudentRequest;
-import org.example.educlass.member.dto.AddUserRequest;
 import org.example.educlass.member.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +15,12 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    public Student createStudent(AddUserRequest addUserRequest, AddStudentRequest addStudentRequest) {
-        if (addUserRequest.getUsertype() != Usertype.STUDENT) {
-            throw new IllegalArgumentException("해당 유저는 학생이 아닙니다.");
-        }
-        Student student = studentRepository.save(addStudentRequest.toEntity());
-        student.setUser(addUserRequest.toEntity());
+    public Student createStudent(AddStudentRequest addStudentRequest) {
 
-        return student;
+        return studentRepository.save(addStudentRequest.toEntity());
     }
+
+    @Column(nullable = false)
 
     public List<Student> findAllStudents() {
 

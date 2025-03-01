@@ -1,3 +1,8 @@
 .student-list {
     padding-left: 200px;
 }
+
+td {
+    padding: 5px 0 5px 0;
+    border: solid black 1px;
+}

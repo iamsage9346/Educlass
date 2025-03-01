@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.member.domain.Student;
 import org.example.educlass.member.dto.AddStudentRequest;
-import org.example.educlass.member.dto.AddUserRequest;
 import org.example.educlass.member.dto.StudentResponse;
 import org.example.educlass.member.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,8 @@ public class StudentController {
 
     @Operation(summary = "학생 생성", description = "새로운 학생을 생성합니다.")
     @PostMapping("/api/student")
-    public ResponseEntity<StudentResponse> createStudent(@RequestBody AddUserRequest userRequest, @RequestBody AddStudentRequest studentRequest) {
-        Student student = studentService.createStudent(userRequest, studentRequest);
+    public ResponseEntity<StudentResponse> createStudent(@RequestBody AddStudentRequest studentRequest) {
+        Student student = studentService.createStudent(studentRequest);
 
         StudentResponse studentResponse = new StudentResponse(student);
 

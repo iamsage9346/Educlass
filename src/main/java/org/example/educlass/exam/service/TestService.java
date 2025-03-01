@@ -4,10 +4,7 @@ package org.example.educlass.exam.service;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.exam.domain.Test;
 import org.example.educlass.exam.dto.TestRequest;
-import org.example.educlass.exam.repository.StudentTestRepository;
 import org.example.educlass.exam.repository.TestRepository;
-import org.example.educlass.ProblemSet.service.ProblemSetService;
-import org.example.educlass.member.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +14,11 @@ import java.util.List;
 @Service
 public class TestService {
 
-    private final StudentTestRepository studentTestRepository;
-    private final StudentRepository studentRepository;
     private final TestRepository testRepository;
-    private final ProblemSetService problemSetService;
 
     // 테스트 생성
     @Transactional
     public Test createTest(TestRequest testRequest) {
-
         return testRepository.save(testRequest.toEntity());
     }
 

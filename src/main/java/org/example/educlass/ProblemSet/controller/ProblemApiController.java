@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "Problem API", description = "문제 관련 API")
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class ProblemApiController {
         List<ProblemResponse> problems = problemService.findAllProblems()
                 .stream()
                 .map(ProblemResponse::new)
-                .toList();
+                .collect(Collectors.toList());
         return ResponseEntity.ok()
                 .body(problems);
     }

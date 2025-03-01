@@ -13,14 +13,13 @@
         }
 
         tr, th {
-            border-bottom: 1px solid black;
+            border: 1px solid black;
             padding: 5px 0;
 
         }
         .student-list {
             padding-left: 200px;
         }
-
     </style>
 </head>
 <body>
@@ -33,33 +32,26 @@
         </form>
         <div class="student-list-content">
             <div class="student-count">
-                총 학생 수: <span th:text="${#lists.size(students)}"></span>명
+                총 학생 수: <span th:text="${#lists.size(studentTests)}"></span>명
             </div>
             <table class="students" style="border: 1px solid black; width: 100%; text-align: center;">
                 <thead>
                 <tr>
                     <th>No.</th>
-                    <th>학년 반</th>
-                    <th>이름(전화번호)</th>
-                    <th>보고서</th>
-                    <th>제출한 학습지</th>
-                    <th>비밀번호</th>
+                    <th>강의 이름</th>
+                    <th>학년 단원</th>
+                    <th>학생 email</th>
+                    <th>학생 이름</th>
+                    <th>점수</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="students, stat : ${students}">
-                    <td th:text="${stat.index + 1}"></td>
-                    <td th:text="${students.grade} + '-' + ${students.classNum}"></td>
-                    <td th:text="${students.name} + ' (' + ${students.phone} + ')'"></td>
-                    <td>
-<!--                        보고서 -->
-                    </td>
-                    <td>
-<!--                        제출한 학습지-->
-                    </td>
-                    <td>
-                        <span th:text="'********'"></span>
-                    </td>
+                <tr th:each="studentTests, stat : ${studentTests}">
+                    <td th:text="${studentTests.id}"></td>
+                    <td th:text="${studentTests.test.lecture.name}"></td>
+                    <td th:text="${studentTests.student.grade} + ' (' + ${studentTests.test.lecture.chapter} + ')'"></td>
+                    <td th:text="${studentTests.student.name}"></td>
+                    <td th:text="${studentTests.score}"></td>
                 </tr>
                 </tbody>
             </table>
