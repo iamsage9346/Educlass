@@ -3,7 +3,6 @@ package org.example.educlass.exam.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.ProblemSet.domain.ProblemSet;
-import org.example.educlass.ProblemSet.dto.ProblemSetRequest;
 import org.example.educlass.ProblemSet.service.ProblemSetService;
 import org.example.educlass.exam.domain.StudentTest;
 import org.example.educlass.exam.dto.StudentTestMarkRequest;

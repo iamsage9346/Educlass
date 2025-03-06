@@ -27,8 +27,9 @@ spring:
       platform: h2
   h2:
     console:
-      # H2 콘솔을 활성화
       enabled: true
+      path: /h2-console # H2 콘솔 접속 경로 설정
+
 
 server:
   shutdown: graceful

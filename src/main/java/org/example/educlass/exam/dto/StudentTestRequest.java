@@ -2,7 +2,6 @@ package org.example.educlass.exam.dto;
 
 import lombok.Getter;
 import org.example.educlass.exam.domain.StudentTest;
-import org.example.educlass.exam.domain.Test;
 import org.example.educlass.member.domain.Student;
 
 @Getter

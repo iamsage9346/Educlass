@@ -8,14 +8,10 @@ import java.util.List;
 
 @Getter
 public class ProblemSetResponse {
-    private Long testId;
-    private List<ProblemSet> problemSets;
-    private int chapter;
+    private List<ProblemSet> problemSet;
 
     public ProblemSetResponse(ProblemSet problemSet) {
-        this.testId = problemSet.getTest().getId();
-        this.problemSets = new ArrayList<>();
-        this.problemSets.add(problemSet);
-        this.chapter = getChapter();
+        this.problemSet = new ArrayList<>();
+        this.problemSet.add(problemSet);
     }
 }

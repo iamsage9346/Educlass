@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.ProblemSet.domain.ProblemSet;
-import org.example.educlass.ProblemSet.dto.ProblemSetRequest;
 import org.example.educlass.ProblemSet.dto.ProblemSetResponse;
 import org.example.educlass.ProblemSet.service.ProblemSetService;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "ProblemSet API", description = "문제지 관련 API")
@@ -25,8 +23,8 @@ public class ProblemSetApiController {
 
     @Operation(summary = "문제지 생성", description = "랜덤으로 n개의 문제를 골라 문제지를 생성합니다.")
     @PostMapping("/api/problem-set")
-    public ResponseEntity<ProblemSetResponse> createProblemSet(@RequestBody ProblemSetRequest problemSetRequest) {
-        ProblemSet problemSet = problemSetService.createProblemSet(problemSetRequest);
+    public ResponseEntity<ProblemSetResponse> createProblemSet(@PathVariable Long id) {
+        ProblemSet problemSet = problemSetService.createProblemSet(id);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProblemSetResponse(problemSet));
     }
 

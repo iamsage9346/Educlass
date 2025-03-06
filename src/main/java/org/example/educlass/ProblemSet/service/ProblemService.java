@@ -43,7 +43,4 @@ public class ProblemService {
         problemRepository.deleteById(id);
     }
 
-    public List<Problem> filterProblems(int grade, int chapter) {
-        return problemRepository.findByGradeAndChapter(grade, chapter);
-    }
 }

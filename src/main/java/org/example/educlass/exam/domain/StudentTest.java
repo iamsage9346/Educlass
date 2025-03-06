@@ -35,8 +35,8 @@ public class StudentTest extends BaseTimeEntity {
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "test_id", nullable = false)
-    private Test test;
+    @JoinColumn(name = "lecture_id", nullable = false)
+    private Lecture lecture;
 
     @Column(nullable = false)
     private int score; // 학생의 점수
@@ -44,14 +44,20 @@ public class StudentTest extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean completed; // 응시 여부
 
+    @Column(nullable = false)
+    private int grade; // 응시 여부
+
+    @Column(nullable = false)
+    private int chapter; // 응시 여부
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "problem_set_id")
     private ProblemSet problemSet;
 
     @Builder
-    public StudentTest(Student student, Test test, int score, boolean completed) {
+    public StudentTest(Student student, Lecture lecture, int score, boolean completed) {
         this.student = student;
-        this.test = test;
+        this.lecture = lecture;
         this.score = score;
         this.completed = completed;
     }
