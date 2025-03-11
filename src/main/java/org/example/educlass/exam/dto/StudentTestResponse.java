@@ -2,6 +2,7 @@ package org.example.educlass.exam.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.educlass.ProblemSet.domain.ProblemSet;
 import org.example.educlass.exam.domain.StudentTest;
 
 @Getter
@@ -9,16 +10,14 @@ import org.example.educlass.exam.domain.StudentTest;
 public class StudentTestResponse {
 
     private Long studentId;
-    private Long testId;
-    private Long problemSetId;
-    private int grade;
+    private ProblemSet problemSet;
     private int chapter;
+    private int grade;
 
     public StudentTestResponse(StudentTest studentTest) {
         this.studentId = studentTest.getId();
-        this.testId = studentTest.getId();
-        this.problemSetId = studentTest.getProblemSet().getId();
-        this.grade = studentTest.getTest().getLecture().getGrade();
-        this.chapter = studentTest.getTest().getLecture().getChapter();
+        this.problemSet = studentTest.getProblemSet();
+        this.chapter = studentTest.getChapter();
+        this.grade = studentTest.getGrade();
     }
 }

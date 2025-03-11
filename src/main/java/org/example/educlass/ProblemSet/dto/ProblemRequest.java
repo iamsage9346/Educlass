@@ -20,7 +20,7 @@ public class ProblemRequest {
                 .answer(answer)
                 .chapter(chapter)
                 .grade(grade)
-                .type(type)
+                .problemType(type)
                 .build();
     }
 }

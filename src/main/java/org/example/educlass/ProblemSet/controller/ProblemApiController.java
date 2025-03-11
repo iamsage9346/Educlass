@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -76,14 +75,4 @@ public class ProblemApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "챕터 별 문제 필터", description = "학년과 챕터 별 문제를 조회합니다.")
-    @GetMapping("/api/problems")
-    public ResponseEntity<List<ProblemResponse>> filterProblems(@RequestParam int grade, @RequestParam int chapter) {
-        List<ProblemResponse> problems = problemService.filterProblems(grade, chapter)
-                .stream()
-                .map(ProblemResponse::new)
-                .toList();
-        return ResponseEntity.ok()
-                .body(problems);
-    }
 }

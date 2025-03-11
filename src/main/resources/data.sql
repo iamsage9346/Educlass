@@ -9,24 +9,110 @@ INSERT INTO student (name, phone, grade, class_num, gender) VALUES
 ('강민수', '010-1359-1776', 1, 1, 0),
 ('최지훈', '010-2953-1231', 3, 2, 1);
 
--- 🎓 강의(Lecture) 데이터 삽입
-INSERT INTO Lecture (name, link, chapter, grade)
-VALUES ('수학 1단원', 'https://math1.com', 1, 3),
-       ('과학 2단원', 'https://science2.com', 2, 2),
-       ('영어 기초', 'https://english.com', 1, 1);
+-- grade:3 인 챕터 별 강의
+INSERT INTO lecture (id, name, grade, link, chapter) VALUES
+(1, 'Mathematics', 3, 'https://www.naver.com/', 1),
+(2, 'Science', 3, 'https://www.naver.com/', 2);
 
--- 📝 시험(Test) 데이터 삽입
-INSERT INTO Test (lecture_id)
-VALUES (1),  -- 수학 시험
-       (2),  -- 과학 시험
-       (3);  -- 영어 시험
+INSERT INTO student_lecture (id, student_id, lecture_id, progress) VALUES
+(1, 1, 1, 100),
+(2, 1, 2, 100);
 
--- 🏆 학생 시험(StudentTest) 데이터 삽입
-INSERT INTO student_test (student_id, test_id, score, completed, created_at, updated_at)
-VALUES (1, 1, 85, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       (2, 2, 92, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       (3, 3, 78, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- 문제지 생성
+INSERT INTO problem_set (id) VALUES (1), (2);
 
+INSERT INTO student_test (id, student_id, student_lecture_id, problem_set_id, chapter, grade, completed, score) VALUES
+(1, 1, 1, 1, 1, 3, 'N', 0), -- Algebra 시험
+(2, 1, 2, 2, 2, 3, 'N', 0); -- Physics 시험
+
+-- grade:3, chapter:1 problem
+INSERT INTO problem (id, content, answer, problem_type, grade, chapter) VALUES
+(1, 'content1', 'answer1', 'MULTIPLE_CHOICE', 3, 1),
+(2, 'content2', 'answer2', 'MULTIPLE_CHOICE', 3, 1),
+(3, 'content3', 'answer3', 'MULTIPLE_CHOICE', 3, 1),
+(4, 'content4', 'answer4', 'MULTIPLE_CHOICE', 3, 1),
+(5, 'content5', 'answer5', 'MULTIPLE_CHOICE', 3, 1),
+(6, 'content6', 'answer6', 'MULTIPLE_CHOICE', 3, 1),
+(7, 'content7', 'answer7', 'MULTIPLE_CHOICE', 3, 1),
+(8, 'content8', 'answer8', 'MULTIPLE_CHOICE', 3, 1),
+(9, 'content9', 'answer9', 'MULTIPLE_CHOICE', 3, 1),
+(10, 'content10', 'answer10', 'MULTIPLE_CHOICE', 3, 1),
+(11, 'content11', 'answer11', 'MULTIPLE_CHOICE', 3, 1),
+(12, 'content12', 'answer12', 'MULTIPLE_CHOICE', 3, 1),
+(13, 'content13', 'answer13', 'MULTIPLE_CHOICE', 3, 1),
+(14, 'content14', 'answer14', 'MULTIPLE_CHOICE', 3, 1),
+(15, 'content15', 'answer15', 'MULTIPLE_CHOICE', 3, 1),
+(16, 'content16', 'answer16', 'SHORT_ANSWER', 3, 1),
+(17, 'content17', 'answer17', 'SHORT_ANSWER', 3, 1),
+(18, 'content18', 'answer18', 'SHORT_ANSWER', 3, 1),
+(19, 'content19', 'answer19', 'SHORT_ANSWER', 3, 1),
+(20, 'content20', 'answer20', 'SHORT_ANSWER', 3, 1),
+(21, 'content21', 'answer21', 'SHORT_ANSWER', 3, 1),
+(22, 'content22', 'answer22', 'SHORT_ANSWER', 3, 1),
+(23, 'content23', 'answer23', 'SHORT_ANSWER', 3, 1),
+(24, 'content24', 'answer24', 'SHORT_ANSWER', 3, 1),
+(25, 'content25', 'answer25', 'SHORT_ANSWER', 3, 1),
+(26, 'content26', 'answer26', 'ESSAY', 3, 1),
+(27, 'content27', 'answer27', 'ESSAY', 3, 1),
+(28, 'content28', 'answer28', 'ESSAY', 3, 1),
+(29, 'content29', 'answer29', 'ESSAY', 3, 1),
+(30, 'content30', 'answer30', 'ESSAY', 3, 1),
+(31, 'content31', 'answer31', 'ESSAY', 3, 1),
+(32, 'content32', 'answer32', 'ESSAY', 3, 1),
+(33, 'content33', 'answer33', 'ESSAY', 3, 1),
+(34, 'content34', 'answer34', 'ESSAY', 3, 1),
+(35, 'content35', 'answer35', 'ESSAY', 3, 1);
+
+-- grade:3, chapter:2 problem
+INSERT INTO problem (id, content, answer, problem_type, grade, chapter) VALUES
+(36, 'content36', 'answer36', 'MULTIPLE_CHOICE', 3, 2),
+(37, 'content37', 'answer37', 'MULTIPLE_CHOICE', 3, 2),
+(38, 'content38', 'answer38', 'MULTIPLE_CHOICE', 3, 2),
+(39, 'content39', 'answer39', 'MULTIPLE_CHOICE', 3, 2),
+(40, 'content40', 'answer40', 'MULTIPLE_CHOICE', 3, 2),
+(41, 'content41', 'answer41', 'MULTIPLE_CHOICE', 3, 2),
+(42, 'content42', 'answer42', 'MULTIPLE_CHOICE', 3, 2),
+(43, 'content43', 'answer43', 'MULTIPLE_CHOICE', 3, 2),
+(44, 'content44', 'answer44', 'MULTIPLE_CHOICE', 3, 2),
+(45, 'content45', 'answer45', 'MULTIPLE_CHOICE', 3, 2),
+(46, 'content46', 'answer46', 'MULTIPLE_CHOICE', 3, 2),
+(47, 'content47', 'answer47', 'MULTIPLE_CHOICE', 3, 2),
+(48, 'content48', 'answer48', 'MULTIPLE_CHOICE', 3, 2),
+(49, 'content49', 'answer49', 'MULTIPLE_CHOICE', 3, 2),
+(50, 'content50', 'answer50', 'MULTIPLE_CHOICE', 3, 2),
+(51, 'content51', 'answer51', 'SHORT_ANSWER', 3, 2),
+(52, 'content52', 'answer52', 'SHORT_ANSWER', 3, 2),
+(53, 'content53', 'answer53', 'SHORT_ANSWER', 3, 2),
+(54, 'content54', 'answer54', 'SHORT_ANSWER', 3, 2),
+(55, 'content55', 'answer55', 'SHORT_ANSWER', 3, 2),
+(56, 'content56', 'answer56', 'SHORT_ANSWER', 3, 2),
+(57, 'content57', 'answer57', 'SHORT_ANSWER', 3, 2),
+(58, 'content58', 'answer58', 'SHORT_ANSWER', 3, 2),
+(59, 'content59', 'answer59', 'SHORT_ANSWER', 3, 2),
+(60, 'content60', 'answer60', 'SHORT_ANSWER', 3, 2),
+(61, 'content61', 'answer61', 'ESSAY', 3, 2),
+(62, 'content62', 'answer62', 'ESSAY', 3, 2),
+(63, 'content63', 'answer63', 'ESSAY', 3, 2),
+(64, 'content64', 'answer64', 'ESSAY', 3, 2),
+(65, 'content65', 'answer65', 'ESSAY', 3, 2),
+(66, 'content66', 'answer66', 'ESSAY', 3, 2),
+(67, 'content67', 'answer67', 'ESSAY', 3, 2),
+(68, 'content68', 'answer68', 'ESSAY', 3, 2),
+(69, 'content69', 'answer69', 'ESSAY', 3, 2),
+(70, 'content70', 'answer70', 'ESSAY', 3, 2);
+
+
+-- Problem Set 1: Grade 3, Chapter 1
+INSERT INTO problem_set_to_problem (problem_set_id, problem_id) VALUES
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+(1, 6), (1, 7), (1, 8), (1, 9), (1, 10);
+
+-- Problem Set 2: Grade 3, Chapter 2
+INSERT INTO problem_set_to_problem (problem_set_id, problem_id) VALUES
+(2, 36), (2, 37), (2, 38), (2, 39), (2, 40),
+(2, 41), (2, 42), (2, 43), (2, 44), (2, 45);
+
+-- 학생 90명 추가
 -- ('조태윤', '010-2827-3729', 2, 2, 0),
 -- ('임태윤', '010-4607-6305', 1, 8, 0),
 -- ('김태윤', '010-1424-5542', 3, 6, 1),

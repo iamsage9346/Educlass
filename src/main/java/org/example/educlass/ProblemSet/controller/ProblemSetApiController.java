@@ -30,7 +30,7 @@ public class ProblemSetApiController {
 
     @Operation(summary = "개별 문제지 조회", description = "id 별 문제지를 조회합니다.")
     @GetMapping("/api/problem-set/{id}")
-    public ResponseEntity<ProblemSetResponse> getProblemSet (@PathVariable Long id) {
+    public ResponseEntity<ProblemSetResponse> getProblemSet(@PathVariable Long id) {
         ProblemSet problemSet = problemSetService.findProblemSetById(id);
 
         return new ResponseEntity<>(new ProblemSetResponse(problemSet), HttpStatus.OK);

@@ -2,16 +2,22 @@ package org.example.educlass.exam.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.educlass.ProblemSet.domain.Problem;
 import org.example.educlass.ProblemSet.domain.ProblemSet;
+import org.example.educlass.ProblemSet.repository.ProblemRepository;
 import org.example.educlass.ProblemSet.service.ProblemSetService;
+import org.example.educlass.exam.domain.Completed;
 import org.example.educlass.exam.domain.StudentTest;
+import org.example.educlass.exam.domain.StudentTestResult;
+import org.example.educlass.exam.dto.StudentTestAnswerDto;
 import org.example.educlass.exam.dto.StudentTestMarkRequest;
 import org.example.educlass.exam.dto.StudentTestRequest;
+import org.example.educlass.exam.dto.StudentTestSubmissionDto;
 import org.example.educlass.exam.repository.StudentTestRepository;
+import org.example.educlass.exam.repository.StudentTestResultRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,74 +27,79 @@ public class StudentTestService {
 
     private final StudentTestRepository studentTestRepository;
     private final ProblemSetService problemSetService;
+    private final StudentTestResultRepository studentTestResultRepository;
+    private final ProblemRepository problemRepository;
 
-    // 학생 시험 생성
     public StudentTest createStudentTest(StudentTestRequest studentTestRequest) {
         StudentTest studentTest = studentTestRequest.toEntity();
+        studentTest.setCompleted(Completed.N);
 
-        ProblemSet problemSet = problemSetService.createProblemSet(new ProblemSetRequest(
-                studentTest.getTest().getId(),
-                studentTest.getTest().getLecture().getChapter(),
-                studentTest.getTest().getLecture().getGrade()
-        ));
-
-        studentTest.setProblemSet(problemSet);
+        // 문제지 자동 생성
+        problemSetService.createProblemSet(studentTest.getId());
 
         return studentTestRepository.save(studentTest);
     }
 
-    // 학생 시험 삭제
     @Transactional
     public void deleteStudentTest(Long id) {
-        if (!studentTestRepository.existsById(id)) {
-            throw new EntityNotFoundException("StudentTest not found with id: " + id);
-        }
-        studentTestRepository.deleteById(id);
+        StudentTest studentTest = getStudentTestById(id);
+        studentTestRepository.delete(studentTest);
     }
 
-    // 학생 시험 개별 조회
     public StudentTest getStudentTestById(Long id) {
         return studentTestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("StudentTest not found with id: " + id));
     }
 
-    // 학생 시험 전체 조회
     public List<StudentTest> getAllStudentTests() {
         return studentTestRepository.findAll();
     }
 
-    // 학생 시험 채점
+    @Transactional
+    public void processStudentTestSubmission(Long studentTestId, StudentTestSubmissionDto submissionDto) {
+        StudentTest studentTest = getStudentTestById(studentTestId);
+        ProblemSet problemSet = studentTest.getProblemSet();
+        int score = 0;
+        List<StudentTestResult> testResults = new ArrayList<>();
+
+        for (StudentTestAnswerDto answerDto : submissionDto.getStudentAnswers()) {
+            Problem problem = problemSet.getProblems().stream()
+                    .filter(p -> p.getId().equals(answerDto.getProblemId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("문제를 찾을 수 없습니다."));
+
+            boolean isCorrect = problem.getAnswer().trim().equalsIgnoreCase(answerDto.getAnswer().trim());
+            if (isCorrect) {
+                score++;
+            }
+
+            // 정오표 저장
+            StudentTestResult testResult = new StudentTestResult();
+            testResult.setStudentTest(studentTest);
+            testResult.setProblem(problem);
+            testResult.setStudentAnswer(answerDto.getAnswer());
+            testResult.setIsCorrect(isCorrect);
+            testResults.add(testResult);
+        }
+
+        studentTest.setScore(score);
+        studentTest.setCompleted(Completed.Y);
+        studentTestRepository.save(studentTest);
+        studentTestResultRepository.saveAll(testResults);
+    }
+
     @Transactional
     public void markStudentTest(Long id, StudentTestMarkRequest request) {
         StudentTest studentTest = getStudentTestById(id);
-        ProblemSet problemSet = studentTest.getProblemSet();
-        int score = 0;
+        List<StudentTestResult> testResults = studentTest.getStudentTestResults();
 
-        List<String> answerSet = new ArrayList<>();
-        problemSet.getProblems().forEach(problem -> answerSet.add(problem.getAnswer()));
-
-        List<String> studentAnswerSet = request.getStudentAnswers();
-        for (int i = 0; i < studentAnswerSet.size(); i++) {
-            if (studentAnswerSet.get(i).equals(answerSet.get(i))) {
-                score++;
-            }
-        }
-        studentTest.setScore(score);
-        studentTest.setCompleted(true);
-
-        studentTestRepository.save(studentTest);
-    }
-
-    // 학생 시험 응시
-    @Transactional
-    public void takeStudentTest(Long id) {
-        StudentTest studentTest = getStudentTestById(id);
-        ZonedDateTime startTime = studentTest.getCreatedAt();
-        if (ZonedDateTime.now().minusHours(1).isAfter(startTime)) {
-            throw new IllegalStateException("시험 시간이 만료되었습니다.");
+        for (StudentTestAnswerDto studentAnswer : request.getStudentAnswers()) {
+            testResults.stream()
+                    .filter(result -> result.getProblem().getId().equals(studentAnswer.getProblemId()))
+                    .forEach(result -> result.setStudentAnswer(studentAnswer.getAnswer()));
         }
 
         studentTestRepository.save(studentTest);
+        studentTestResultRepository.saveAll(testResults);
     }
-
 }

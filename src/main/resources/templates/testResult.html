@@ -48,10 +48,10 @@
                 <tbody>
                 <tr th:each="studentTests, stat : ${studentTests}">
                     <td th:text="${studentTests.id}"></td>
-                    <td th:text="${studentTests.test.lecture.name}"></td>
-                    <td th:text="${studentTests.student.grade} + ' (' + ${studentTests.test.lecture.chapter} + ')'"></td>
-                    <td th:text="${studentTests.student.name}"></td>
-                    <td th:text="${studentTests.score}"></td>
+                    <td th:text="${studentTests.getStudentLecture().getLecture().getName()}"></td>
+                    <td th:text="${studentTests.getGrade()} + ' (' + ${studentTests.getChapter()} + ')'"></td>
+                    <td th:text="${studentTests.getStudent().getName()}"></td>
+                    <td th:text="${studentTests.getScore()}"></td>
                 </tr>
                 </tbody>
             </table>

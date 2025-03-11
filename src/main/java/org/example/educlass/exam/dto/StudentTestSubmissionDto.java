@@ -1,12 +1,13 @@
 package org.example.educlass.exam.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
-public class StudentTestMarkRequest {
-    private Long studentId;
-    private Long StudentTestId;
+@Setter
+public class StudentTestSubmissionDto {
+    private Long studentTestId;
     private List<StudentTestAnswerDto> studentAnswers;
 }

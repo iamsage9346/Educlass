@@ -19,6 +19,6 @@ public class ProblemResponse {
         this.answer = problem.getAnswer();
         this.chapter = problem.getChapter();
         this.grade = problem.getGrade();
-        this.type = problem.getType();
+        this.type = problem.getProblemType();
     }
 }
