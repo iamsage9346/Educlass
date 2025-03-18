@@ -56,12 +56,12 @@
 <body>
 
 <!-- 시험 ID를 숨겨진 필드로 저장 -->
-<input type="hidden" id="studentTestId" th:value="${studentTest.id}">
+<input type="hidden" id="studentTestId" th:value="${studentExam.id}">
 
 <nav class="side-menu"></nav>
 <div class="container">
   <h2>시험 문제</h2>
-  <div class="problem_set" th:each="problemSetToProblem : ${studentTest.problemSet.problemSetToProblems}">
+  <div class="problem_set" th:each="problemSetToProblem : ${studentExam.problemSet.problemSetToProblems}">
     <div class="problem">
 
       <p class="problem_content" th:text="${problemSetToProblem.problem.content}"></p>

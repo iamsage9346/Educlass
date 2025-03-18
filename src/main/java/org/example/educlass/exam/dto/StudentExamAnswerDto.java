@@ -8,7 +8,7 @@ import org.example.educlass.ProblemSet.domain.ProblemType;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentTestAnswerDto {
+public class StudentExamAnswerDto {
     private Long problemId;
     private String answer;
     private ProblemType problemType;

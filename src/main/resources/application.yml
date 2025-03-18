@@ -1,35 +1,22 @@
 spring:
-  cloud:
-    config:
-      enabled: false
-  lifecycle:
-    timeout-per-shutdown-phase: 20s
   datasource:
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
+    url: jdbc:mysql://localhost:3306/edu_class?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-    defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
-        jdbc:
-          time_zone: UTC
+    open-in-view: false
+
   sql:
     init:
-      data-locations: classpath*:data.sql
       mode: always
-      platform: h2
-  h2:
-    console:
-      enabled: true
-      path: /h2-console # H2 콘솔 접속 경로 설정
-
-
-server:
-  shutdown: graceful

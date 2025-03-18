@@ -21,11 +21,13 @@ public class LectureService {
         return lectureRepository.save(lectureRequest.toEntity());
     }
 
+    @Transactional
     public Lecture getLectureById(Long id) {
         return lectureRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Lecture not found: " + id));
     }
 
+    @Transactional
     public List<Lecture> getAllLectures() {
         return lectureRepository.findAll();
     }

@@ -7,7 +7,6 @@
     <title>학생 목록</title>
     <link rel="stylesheet" href="/studentList.css">
     <style>
-
         table {
             border-collapse: collapse;
         }
@@ -32,7 +31,7 @@
         </form>
         <div class="student-list-content">
             <div class="student-count">
-                총 학생 수: <span th:text="${#lists.size(studentTests)}"></span>명
+                총 학생 수: <span th:text="${#lists.size(studentExams)}"></span>명
             </div>
             <table class="students" style="border: 1px solid black; width: 100%; text-align: center;">
                 <thead>
@@ -46,12 +45,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="studentTests, stat : ${studentTests}">
-                    <td th:text="${studentTests.id}"></td>
-                    <td th:text="${studentTests.getStudentLecture().getLecture().getName()}"></td>
-                    <td th:text="${studentTests.getGrade()} + ' (' + ${studentTests.getChapter()} + ')'"></td>
-                    <td th:text="${studentTests.getStudent().getName()}"></td>
-                    <td th:text="${studentTests.getScore()}"></td>
+                <tr th:each="studentExams, stat : ${studentExams}">
+                    <td th:text="${studentExams.id}"></td>
+                    <td th:text="${studentExams.getStudentLecture().getLecture().getName()}"></td>
+                    <td th:text="${studentExams.getGrade()} + ' (' + ${studentExams.getChapter()} + ')'"></td>
+                    <td th:text="${studentExams.getStudent().getName()}"></td>
+                    <td th:text="${studentExams.getStudent().getName()}"></td>
+                    <td th:text="${studentExams.getScore()}"></td>
                 </tr>
                 </tbody>
             </table>

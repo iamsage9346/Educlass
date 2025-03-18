@@ -5,8 +5,8 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class StudentTestMarkRequest {
+public class StudentExamMarkRequest {
     private Long studentId;
-    private Long StudentTestId;
-    private List<StudentTestAnswerDto> studentAnswers;
+    private Long StudentExamId;
+    private List<StudentExamAnswerDto> studentAnswers;
 }

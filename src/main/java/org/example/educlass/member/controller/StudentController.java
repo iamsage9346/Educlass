@@ -7,6 +7,7 @@ import org.example.educlass.member.domain.Student;
 import org.example.educlass.member.dto.AddStudentRequest;
 import org.example.educlass.member.dto.StudentResponse;
 import org.example.educlass.member.service.StudentService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,13 +48,25 @@ public class StudentController {
 
     @Operation(summary = "학생 전체 조회", description = "모든 학생을 조회합니다.")
     @GetMapping("/api/students")
-    public ResponseEntity<List<StudentResponse>> getAllStudents() {
+    public ResponseEntity<List<StudentResponse>> findAllStudents() {
         List<StudentResponse> studentResponses = studentService.findAllStudents()
                 .stream()
                 .map(StudentResponse::new)
                 .toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(studentResponses);
+    }
+
+    @Operation(summary = "학생 전체 페이징 조회", description = "모든 학생을 페이징해서 조회합니다.")
+    @GetMapping("/api/students/paged")
+    public ResponseEntity<Page<StudentResponse>> findAllStudentsPageable(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<Student> studentPage = studentService.findAllStudentsPage(page, size);
+        Page<StudentResponse> responsePage = studentPage.map(StudentResponse::new);
+
+        return ResponseEntity.ok(responsePage);
     }
 
     @Operation(summary = "학생 정보 수정", description = "id별 학생을 수정합니다.")

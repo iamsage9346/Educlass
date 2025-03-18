@@ -1,0 +1,8 @@
+.student-lecture {
+    display: flex;
+    justify-content: space-between;
+}
+
+.student-lecture-progress {
+    align-items: center;
+}

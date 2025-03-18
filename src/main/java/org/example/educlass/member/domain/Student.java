@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.educlass.exam.domain.StudentTest;
+import org.example.educlass.exam.domain.StudentExam;
 
 import java.util.List;
 
@@ -44,10 +44,7 @@ public class Student {
     private int gender;  // 성별 (0 = male, 1 = female)
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StudentTest> studentTests;  // 학생이 응시한 시험 목록
-
-//    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Lecture> lectures;  // 학생이 응시한 시험 목록
+    private List<StudentExam> studentExams;  // 학생이 응시한 시험 목록
 
     @Builder
     public Student(String name, String phone, int grade, int classNum, int gender) {

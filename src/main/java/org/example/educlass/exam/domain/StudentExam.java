@@ -26,11 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "student_test")
+@Table(name = "student_exam")
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentTest extends BaseTimeEntity {
+public class StudentExam extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +47,8 @@ public class StudentTest extends BaseTimeEntity {
     @Column
     private int score; // 학생의 점수
 
-    @OneToMany(mappedBy = "studentTest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentTestResult> studentTestResults = new ArrayList<>();
+    @OneToMany(mappedBy = "studentExam", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentExamResult> studentExamResults = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Completed completed; // 시간으로 해결해라 굳이 enum으로 하기에는 너무 적다.
@@ -66,7 +66,7 @@ public class StudentTest extends BaseTimeEntity {
     private ProblemSet problemSet;
 
     @Builder
-    public StudentTest(Student student, StudentLecture studentLecture, ProblemSet problemSet) {
+    public StudentExam(Student student, StudentLecture studentLecture, ProblemSet problemSet) {
         this.student = student;
         this.studentLecture = studentLecture;
         this.problemSet = problemSet;

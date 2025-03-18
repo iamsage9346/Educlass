@@ -8,14 +8,14 @@ import org.example.educlass.exam.domain.Lecture;
 @Setter
 public class LectureResponse {
     private String name;
-    private int chapter;
     private String link;
+    private int chapter;
     private int grade;
 
     public LectureResponse(Lecture lecture) {
         this.name = lecture.getName();
-        this.chapter = lecture.getChapter();
         this.link = lecture.getLink();
+        this.chapter = lecture.getChapter();
         this.grade = lecture.getGrade();
     }
 }

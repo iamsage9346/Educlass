@@ -15,15 +15,15 @@ import org.example.educlass.ProblemSet.domain.Problem;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentTestResult {
+public class StudentExamResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_test_id", nullable = false)
-    private StudentTest studentTest;
+    @JoinColumn(name = "student_exam_id", nullable = false)
+    private StudentExam studentExam;
 
     @ManyToOne
     @JoinColumn(name = "problem_id", nullable = false)

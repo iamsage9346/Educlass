@@ -7,8 +7,8 @@ import org.example.educlass.ProblemSet.domain.ProblemSetToProblem;
 import org.example.educlass.ProblemSet.repository.ProblemRepository;
 import org.example.educlass.ProblemSet.repository.ProblemSetRepository;
 import org.example.educlass.ProblemSet.repository.ProblemSetToProblemRepository;
-import org.example.educlass.exam.domain.StudentTest;
-import org.example.educlass.exam.repository.StudentTestRepository;
+import org.example.educlass.exam.domain.StudentExam;
+import org.example.educlass.exam.repository.StudentExamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +22,17 @@ public class ProblemSetService {
 
     private final ProblemSetRepository problemSetRepository;
     private final ProblemRepository problemRepository;
-    private final StudentTestRepository studentTestRepository;
+    private final StudentExamRepository studentExamRepository;
     private final ProblemSetToProblemRepository problemSetToProblemRepository;
 
     // 특정 챕터 문제 랜덤 10개 생성
     @Transactional
-    public ProblemSet createProblemSet(Long studentTestId) {
-        StudentTest studentTest = studentTestRepository.findById(studentTestId)
-                .orElseThrow(() -> new IllegalArgumentException("StudentTest not found"));
+    public ProblemSet createProblemSet(Long studentExamId) {
+        StudentExam studentExam = studentExamRepository.findById(studentExamId)
+                .orElseThrow(() -> new IllegalArgumentException("StudentExam not found"));
 
-        int chapter = studentTest.getChapter();
-        int grade = studentTest.getGrade();
+        int chapter = studentExam.getChapter();
+        int grade = studentExam.getGrade();
 
         // 조건에 맞는 문제 10개 랜덤 선택
         List<Problem> multipleChoiceQuestions = problemRepository.findRandomProblems(chapter, grade, "MULTIPLE_CHOICE", 5);

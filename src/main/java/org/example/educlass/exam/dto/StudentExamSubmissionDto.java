@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class StudentTestSubmissionDto {
-    private Long studentTestId;
-    private List<StudentTestAnswerDto> studentAnswers;
+public class StudentExamSubmissionDto {
+    private Long studentExamId;
+    private List<StudentExamAnswerDto> studentAnswers;
 }

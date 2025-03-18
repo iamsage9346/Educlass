@@ -1,0 +1,36 @@
+<!-- src/main/resources/templates/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>대시보드</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+    <h1>대시보드</h1>
+</header>
+
+<main>
+    <section>
+        <h2>내 수강 강좌</h2>
+        <a th:href="@{/dashboard/{studentId}/lectures(studentId=${studentId})}">
+            <button>내 강좌 보기</button>
+        </a>
+    </section>
+
+    <section>
+        <h2>강좌 검색</h2>
+        <a th:href="@{/lectures}">
+            <button>강좌 검색</button>
+        </a>
+    </section>
+
+    <section>
+        <h2>마이 페이지</h2>
+        <a th:href="@{/profile/{studentId}(studentId=${studentId})}">
+            <button>마이 페이지</button>
+        </a>
+    </section>
+</main>
+</body>
+</html>

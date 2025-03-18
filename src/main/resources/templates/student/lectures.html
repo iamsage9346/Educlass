@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>Lectures</title>
+  <link rel="stylesheet" href="/static/lectures.css">
+  <style>
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    .lecture-list {
+      margin-top: 20px;
+    }
+    .student-lecture {
+      border: 1px solid black;
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .student-lecture-name {
+      min-width: 550px;
+      cursor: pointer;
+    }
+    .progress-bar-container {
+      width: 70%;
+      background: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 10px;
+      background: #4CAF50;
+    }
+    .lecture-link {
+      text-decoration: none;
+      color: blue;
+      font-weight: bold;
+    }
+    .exam-button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .exam-button:hover {
+      background-color: #0056b3;
+    }
+
+    .disabled-button {
+      background-color: gray !important;
+      color: white !important;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <h3 class="dashboard-title">강의 목록</h3>
+  <div class="lecture-list">
+    <div class="lecture-count">
+      내 수강 강좌 수: <span th:text="${#lists.size(studentLectures)}"></span>
+    </div>
+
+    <div class="student-lecture" th:each="studentLecture : ${studentLectures}">
+      <h4 class="student-lecture-name">
+        <a th:href="@{/dashboard/${studentId}/lectures/{lectureId}(studentId=${studentId}, lectureId=${studentLecture.lectureId})}"
+           class="lecture-link"
+           th:text="${studentLecture.lectureName}">강의 이름</a>
+      </h4>
+
+      <div class="student-lecture-progress">
+        진행도: <span th:text="${studentLecture.progress}"></span>%
+        <div class="progress-bar-container">
+          <div class="progress-bar" th:style="'width:' + ${studentLecture.progress} + '%'"></div>
+        </div>
+      </div>
+
+      <div class="student-lecture-status">
+        <span th:if="${studentLecture.progress == 100}" style="color: green; font-weight: bold;">완료</span>
+        <span th:if="${studentLecture.progress < 100}" style="color: red;">진행 중</span>
+      </div>
+
+      <div>
+        <a th:if="${studentLecture.progress == 100}" th:href="@{/dashboard/${studentLecture.studentId}/lectures/{lectureId}/exam(lectureId=${studentLecture.lectureId})}">
+          <button class="exam-button">시험보기</button>
+        </a>
+
+        <button th:if="${studentLecture.progress != 100}" class="exam-button disabled-button" disabled>
+          시험보기
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
