@@ -8,6 +8,7 @@ import org.example.educlass.ProblemSet.domain.ProblemType;
 @Getter
 @Setter
 public class ProblemResponse {
+    private Long id;
     private String content;
     private String answer;
     private int chapter;
@@ -15,6 +16,7 @@ public class ProblemResponse {
     private ProblemType type;
 
     public ProblemResponse(Problem problem) {
+        this.id = problem.getId();
         this.content = problem.getContent();
         this.answer = problem.getAnswer();
         this.chapter = problem.getChapter();

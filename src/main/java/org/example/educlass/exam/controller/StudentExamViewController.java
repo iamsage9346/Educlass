@@ -1,9 +1,9 @@
 package org.example.educlass.exam.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.educlass.ProblemSet.domain.ProblemSet;
-import org.example.educlass.ProblemSet.repository.ProblemSetRepository;
-import org.example.educlass.exam.domain.StudentExam;
+import org.example.educlass.ProblemSet.dto.ProblemSetResponse;
+import org.example.educlass.ProblemSet.service.ProblemSetService;
+import org.example.educlass.exam.dto.StudentExamResponse;
 import org.example.educlass.exam.service.StudentExamService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,26 +17,33 @@ import java.util.List;
 public class StudentExamViewController {
 
     private final StudentExamService studentExamService;
-    private final ProblemSetRepository problemSetRepository;
+    private final ProblemSetService problemSetService;
 
     @GetMapping("/exam_results")
     public String getAllExamResult(Model model) {
-        List<StudentExam> studentExams = studentExamService.getAllStudentExams();
+        List<StudentExamResponse> studentExams = studentExamService.getAllStudentExams();
         model.addAttribute("studentExams", studentExams);
 
         return "teacher/examResult";
     }
 
-    @GetMapping("/student_exam/{id}")
-    public String getStudentExam(@PathVariable Long id, Model model) {
-        StudentExam studentExam = studentExamService.getStudentExamById(id);
+    @GetMapping("/student_exam/{studentId}/{studentLectureId}")
+    public String getStudentExam(@PathVariable Long studentId,
+                                 @PathVariable Long studentLectureId,
+                                 Model model) {
+
+        // 1. studentId와 lectureId로 StudentExam 조회
+        StudentExamResponse studentExam = studentExamService.findByStudentIdAndStudentLectureId(studentId, studentLectureId);
+
+        // 2. 연결된 ProblemSet 가져오기
+        Long problemSetId = studentExam.getProblemSetId();
+        ProblemSetResponse problemSet = problemSetService.findProblemSetById(problemSetId);
+
+        // 3. 모델에 담기
         model.addAttribute("studentExam", studentExam);
-        ProblemSet problemSet = problemSetRepository.findByIdWithProblems(studentExam.getProblemSet().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid problem set ID"));
+        model.addAttribute("problemSet", problemSet);
 
-        studentExam.setProblemSet(problemSet);
-
-        return "teacher/studentExam";
+        return "student/studentExam";
     }
 }
 

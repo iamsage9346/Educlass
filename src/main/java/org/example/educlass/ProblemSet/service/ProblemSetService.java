@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.educlass.ProblemSet.domain.Problem;
 import org.example.educlass.ProblemSet.domain.ProblemSet;
 import org.example.educlass.ProblemSet.domain.ProblemSetToProblem;
+import org.example.educlass.ProblemSet.dto.ProblemSetResponse;
 import org.example.educlass.ProblemSet.repository.ProblemRepository;
 import org.example.educlass.ProblemSet.repository.ProblemSetRepository;
 import org.example.educlass.ProblemSet.repository.ProblemSetToProblemRepository;
@@ -27,7 +28,7 @@ public class ProblemSetService {
 
     // 특정 챕터 문제 랜덤 10개 생성
     @Transactional
-    public ProblemSet createProblemSet(Long studentExamId) {
+    public ProblemSetResponse createProblemSet(Long studentExamId) {
         StudentExam studentExam = studentExamRepository.findById(studentExamId)
                 .orElseThrow(() -> new IllegalArgumentException("StudentExam not found"));
 
@@ -56,14 +57,15 @@ public class ProblemSetService {
             problemSetToProblemRepository.save(mapping);
         }
 
-        return problemSet;
+        return new ProblemSetResponse(problemSet);
     }
 
     // 문제지 조회
-    public ProblemSet findProblemSetById(Long id) {
-        return problemSetRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("ProblemSet not found: " + id));
+    public ProblemSetResponse findProblemSetById(Long id) {
+        ProblemSet problemSet = problemSetRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ProblemSet not found"));
 
+        return new ProblemSetResponse(problemSet);
     }
 
     // 문제지 삭제
@@ -78,4 +80,6 @@ public class ProblemSetService {
 
         problemSetRepository.deleteById(id);
     }
+
+
 }

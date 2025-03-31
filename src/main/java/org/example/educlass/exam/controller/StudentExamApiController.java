@@ -3,7 +3,6 @@ package org.example.educlass.exam.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.educlass.exam.domain.StudentExam;
 import org.example.educlass.exam.dto.StudentExamMarkRequest;
 import org.example.educlass.exam.dto.StudentExamRequest;
 import org.example.educlass.exam.dto.StudentExamResponse;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 // Test라는 어휘 자체를 싹 없애기, 변수명 클라스명
 @Tag(name = "StudentExam API", description = "학생당 시험 관련 API")
@@ -33,20 +31,17 @@ public class StudentExamApiController {
     @Operation(summary = "학생시험 생성", description = "학생이 시험을 응시할 때, 시험을 생성합니다.")
     @PostMapping("/api/student-exam")
     public ResponseEntity<StudentExamResponse> createStudentExam(@RequestBody StudentExamRequest studentExamRequest) {
-        StudentExam studentExam = studentExamService.createStudentExam(studentExamRequest);
+        StudentExamResponse studentExam = studentExamService.createStudentExam(studentExamRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new StudentExamResponse(studentExam));
+                .body(studentExam);
     }
 
     // TODO (페이지네이션을 안했을 때, 실행 시간 측정)
     @Operation(summary = "학생시험 전체 조회", description = "학생들이 본 전체 시험 리스트를 조회합니다.")
     @GetMapping("/api/student-exams")
     public ResponseEntity<List<StudentExamResponse>> getAllStudentExams() {
-        List<StudentExamResponse> studentExams = studentExamService.getAllStudentExams()
-                .stream()
-                .map(StudentExamResponse::new)
-                .collect(Collectors.toList());
+        List<StudentExamResponse> studentExams = studentExamService.getAllStudentExams();
 
         return ResponseEntity.ok(studentExams);
     }
@@ -54,10 +49,9 @@ public class StudentExamApiController {
     @Operation(summary = "학생시험 개별 조회", description = "id 별 학생시험을 조회합니다.")
     @GetMapping("/api/student-exam/{id}")
     public ResponseEntity<StudentExamResponse> getStudentExam(@PathVariable Long id) {
-        StudentExam studentExam = studentExamService.getStudentExamById(id);
-        StudentExamResponse studentExamResponse = new StudentExamResponse(studentExam);
+        StudentExamResponse studentExam = studentExamService.getStudentExamById(id);
 
-        return ResponseEntity.ok(studentExamResponse);
+        return ResponseEntity.ok(studentExam);
     }
 
     @Operation(summary = "학생시험 제출", description = "학생이 시험에 답안을 제출합니다.")

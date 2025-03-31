@@ -8,10 +8,10 @@ import java.util.List;
 
 @Getter
 public class ProblemSetResponse {
-    private List<ProblemSet> problemSet;
+    private List<ProblemResponse> problems = new ArrayList<>();
 
     public ProblemSetResponse(ProblemSet problemSet) {
-        this.problemSet = new ArrayList<>();
-        this.problemSet.add(problemSet);
+        problemSet.getProblems().forEach(problem -> this.problems.add(new ProblemResponse(problem)));
     }
+
 }

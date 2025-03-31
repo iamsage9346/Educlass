@@ -3,11 +3,13 @@ package org.example.educlass.member.service;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.member.domain.Student;
 import org.example.educlass.member.dto.AddStudentRequest;
+import org.example.educlass.member.dto.StudentProfileResponse;
 import org.example.educlass.member.repository.StudentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,5 +52,15 @@ public class StudentService {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
         studentRepository.delete(student);
+    }
+
+    @Transactional
+    public StudentProfileResponse getStudentProfileById(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
+        return new StudentProfileResponse(
+                student.getId(), student.getName(), student.getGrade()
+                , student.getClassNum(), student.getCertification().getEmail()
+        );
     }
 }

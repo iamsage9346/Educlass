@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 시험 페이지</title>
+    <link rel="stylesheet" href="/studentList.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2f3640;
+        }
+
+        .problem_set {
+            margin-top: 2rem;
+        }
+
+        .problem {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            background-color: #f0f4f8;
+        }
+
+        .problem_content {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #353b48;
+        }
+
+        .problem_answer {
+            width: 95%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ced6e0;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            background-color: #273c75;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #192a56;
+        }
+    </style>
+    <script>
+        function submitAnswers() {
+            let answers = [];
+            let problemInputs = document.querySelectorAll(".problem_answer");
+
+            problemInputs.forEach(input => {
+                let problemId = input.getAttribute("data-problem-id");
+                let answer = input.value;
+                let type = input.getAttribute("data-problem-type");
+
+                answers.push({
+                    problemId: problemId,
+                    answer: answer,
+                    type: type
+                });
+            });
+
+            let studentExamId = document.getElementById("studentExamId").value;
+
+            let requestData = {
+                studentExamId: studentExamId,
+                studentAnswers: answers
+            };
+
+            fetch(`/api/student-exam/${studentExamId}/submit`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("시험 제출 중 오류가 발생했습니다.");
+                    }
+                    return response.text();
+                })
+                .then(message => {
+                    alert(message);
+                    let studentId = document.getElementById("studentId").value;
+                    window.location.href = `/student-dashboard/${studentId}`;
+
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert(error.message);
+                });
+        }
+    </script>
+</head>
+<body>
+
+<input type="hidden" id="studentExamId" th:value="${studentExam.id}">
+
+<div class="container">
+    <h2>시험 문제</h2>
+    <div class="problem_set" th:each="psp : ${problemSet.problems}">
+        <div class="problem">
+            <p class="problem_content" th:text="${psp.content}"></p>
+            <input type="text" class="problem_answer"
+                   th:attr="data-problem-id=${psp.id}, data-problem-type=${psp.type}"
+                   placeholder="답을 입력하세요" maxlength="200">
+        </div>
+    </div>
+
+    <input type="hidden" id="studentId" th:value="${studentExam.studentId}">
+    <button onclick="submitAnswers()">시험 제출</button>
+</div>
+
+</body>
+</html>

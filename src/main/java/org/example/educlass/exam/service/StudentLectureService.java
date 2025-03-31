@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.educlass.exam.domain.Lecture;
 import org.example.educlass.exam.domain.StudentLecture;
 import org.example.educlass.exam.dto.StudentLectureRequest;
+import org.example.educlass.exam.dto.StudentLectureResponse;
 import org.example.educlass.exam.dto.StudentLectureViewResponse;
 import org.example.educlass.exam.repository.LectureRepository;
 import org.example.educlass.exam.repository.StudentLectureRepository;
@@ -23,7 +24,7 @@ public class StudentLectureService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public StudentLecture createStudentLecture(StudentLectureRequest studentLectureRequest) {
+    public StudentLectureResponse createStudentLecture(StudentLectureRequest studentLectureRequest) {
         Lecture lecture = lectureRepository.findById(studentLectureRequest.getLectureId())
                 .orElseThrow(() -> new EntityNotFoundException("Lecture not found"));
 
@@ -33,15 +34,19 @@ public class StudentLectureService {
         StudentLecture studentLecture = new StudentLecture(lecture, student);
         studentLecture.setProgress(0);
 
-        return studentLectureRepository.save(studentLecture);
+        studentLectureRepository.save(studentLecture);
+        return new StudentLectureResponse(studentLecture);
     }
 
     @Transactional
-    public List<StudentLecture> getAllStudentLectures() {
-        return studentLectureRepository.findAll();
+    public List<StudentLectureResponse> getAllStudentLectures() {
+        return studentLectureRepository.findAll()
+                .stream()
+                .map(StudentLectureResponse::new)
+                .toList();
     }
 
-    @Transactional(readOnly = true) // LazyInitializationException 방지
+    @Transactional(readOnly = true)
     public List<StudentLectureViewResponse> getStudentLectureByStudentId(Long studentId) {
         return studentLectureRepository.findByStudentId(studentId)
                 .stream()
@@ -49,14 +54,16 @@ public class StudentLectureService {
                         studentLecture.getStudent().getId(),
                         studentLecture.getLecture().getId(),
                         studentLecture.getProgress(),
-                        studentLecture.getLecture().getName() // Lazy 로딩 방지
+                        studentLecture.getLecture().getName()
                 ))
                 .toList();
     }
 
-    public StudentLecture getStudentLectureById(Long studentLectureId) {
-        return studentLectureRepository.findById(studentLectureId)
+    public StudentLectureResponse getStudentLectureById(Long studentLectureId) {
+        StudentLecture studentLecture = studentLectureRepository.findById(studentLectureId)
                 .orElseThrow(() -> new EntityNotFoundException("StudentLecture not found with id: " + studentLectureId));
+
+        return new StudentLectureResponse(studentLecture);
     }
 
     public void deleteStudentLecture(Long studentLectureId) {

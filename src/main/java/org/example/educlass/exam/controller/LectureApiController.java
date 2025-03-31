@@ -2,7 +2,6 @@ package org.example.educlass.exam.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.example.educlass.exam.domain.Lecture;
 import org.example.educlass.exam.dto.LectureRequest;
 import org.example.educlass.exam.dto.LectureResponse;
 import org.example.educlass.exam.service.LectureService;
@@ -26,28 +25,25 @@ public class LectureApiController {
     @Operation(summary = "강의 생성", description = "grade, chapter에 맞는 강의를 생성합니다.")
     @PostMapping("/api/lecture")
     public ResponseEntity<LectureResponse> createLecture(@RequestBody LectureRequest lectureRequest) {
-        Lecture lecture = lectureService.createLecture(lectureRequest);
+        LectureResponse lecture = lectureService.createLecture(lectureRequest);
 
-        return ResponseEntity.ok(new LectureResponse(lecture));
+        return ResponseEntity.ok(lecture);
     }
 
     @Operation(summary = "강의 개별 조회", description = "id별 강의를 조회합니다.")
     @GetMapping("/api/lecture/{id}")
     public ResponseEntity<LectureResponse> getLectureById(@PathVariable Long id) {
 
-        Lecture lecture = lectureService.getLectureById(id);
-        return ResponseEntity.ok(new LectureResponse(lecture));
+        LectureResponse lecture = lectureService.getLectureById(id);
+        return ResponseEntity.ok(lecture);
     }
 
     @Operation(summary = "강의 전체 조회", description = "강의 전체를 조회합니다.")
     @GetMapping("/api/lecture")
     public ResponseEntity<List<LectureResponse>> getAllLectures() {
-        List<LectureResponse> lectures = lectureService.getAllLectures()
-                .stream()
-                .map(LectureResponse::new)
-                .toList();
+        List<LectureResponse> lectures = lectureService.getAllLectures();
 
-        return ResponseEntity.ok().body(lectures);
+        return ResponseEntity.ok(lectures);
     }
 
     @Operation(summary = "강의 삭제", description = "id별 강의를 삭제합니다.")
@@ -62,9 +58,9 @@ public class LectureApiController {
     @PutMapping("/api/lecture/{id}")
     public ResponseEntity<LectureResponse> updateLecture(@PathVariable Long id, @RequestBody LectureRequest lectureRequest) {
 
-        Lecture lecture = lectureService.updateLecture(id, lectureRequest);
+        LectureResponse lecture = lectureService.updateLecture(id, lectureRequest);
 
-        return ResponseEntity.ok(new LectureResponse(lecture));
+        return ResponseEntity.ok(lecture);
     }
 
 }

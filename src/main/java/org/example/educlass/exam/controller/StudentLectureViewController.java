@@ -2,7 +2,6 @@ package org.example.educlass.exam.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.exam.dto.StudentLectureViewResponse;
-import org.example.educlass.exam.service.LectureService;
 import org.example.educlass.exam.service.StudentLectureService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +15,8 @@ import java.util.List;
 public class StudentLectureViewController {
 
     private final StudentLectureService studentLectureService;
-    private final LectureService lectureService;
 
-    @GetMapping("/dashboard/{studentId}/lectures")
+    @GetMapping("/student-dashboard/{studentId}/lectures")
     public String getAllStudentLecture(@PathVariable Long studentId, Model model) {
         List<StudentLectureViewResponse> studentLecturesDto = studentLectureService.getStudentLectureByStudentId(studentId)
                 .stream()

@@ -2,7 +2,6 @@ package org.example.educlass.exam.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.example.educlass.exam.domain.StudentLecture;
 import org.example.educlass.exam.dto.StudentLectureRequest;
 import org.example.educlass.exam.dto.StudentLectureResponse;
 import org.example.educlass.exam.service.StudentLectureService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,25 +25,15 @@ public class StudentLectureApiController {
     @Operation(summary = "학생 강의 생성", description = "학생에게 강의를 부여합니다.")
     @PostMapping("/api/student-lecture")
     public ResponseEntity<StudentLectureResponse> createStudentLecture(@RequestBody StudentLectureRequest studentLectureRequest) {
-        StudentLecture studentLecture = studentLectureService.createStudentLecture(studentLectureRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new StudentLectureResponse(
-                        studentLectureRequest.getStudentId(), studentLectureRequest.getLectureId(), studentLecture.getProgress()
-                ));
+        StudentLectureResponse studentLecture = studentLectureService.createStudentLecture(studentLectureRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentLecture);
     }
 
     @Operation(summary = "학생 강의 전체 조회", description = "학생별 강의 전체를 조회합니다. 하지만 필요가 없을 듯 함")
     @GetMapping("/api/student-lectures")
     public ResponseEntity<List<StudentLectureResponse>> getAllStudentLectures() {
-        List<StudentLectureResponse> studentLectures = studentLectureService.getAllStudentLectures()
-                .stream()
-                .map(studentLecture -> new StudentLectureResponse(
-                        studentLecture.getStudent().getId(),
-                        studentLecture.getLecture().getId(),
-                        studentLecture.getProgress()
-                ))
-                .collect(Collectors.toList());
+        List<StudentLectureResponse> studentLectures = studentLectureService.getAllStudentLectures();
 
         return ResponseEntity.ok(studentLectures);
     }
@@ -68,14 +56,9 @@ public class StudentLectureApiController {
     @Operation(summary = "학생 강의 id 별 조회", description = "id별 학생 강의를 조회합니다.")
     @GetMapping("/api/student-lecture/{id}")
     public ResponseEntity<StudentLectureResponse> getStudentLectureById(@PathVariable Long id) {
-        StudentLecture studentLecture = studentLectureService.getStudentLectureById(id);
-        StudentLectureResponse studentLectureResponse = new StudentLectureResponse(
-                studentLecture.getStudent().getId(),
-                studentLecture.getLecture().getId(),
-                studentLecture.getProgress()
-        );
+        StudentLectureResponse studentLecture = studentLectureService.getStudentLectureById(id);
 
-        return ResponseEntity.ok(studentLectureResponse);
+        return ResponseEntity.ok(studentLecture);
     }
 
     @Operation(summary = "학생 강의 id별 삭제", description = "id별 학생 강의를 삭제합니다.")

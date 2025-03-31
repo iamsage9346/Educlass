@@ -7,7 +7,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,16 +45,21 @@ public class Student {
     @Column(nullable = false)
     private int gender;  // 성별 (0 = male, 1 = female)
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "certification_id")
+    private Certification certification;
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StudentExam> studentExams;  // 학생이 응시한 시험 목록
 
     @Builder
-    public Student(String name, String phone, int grade, int classNum, int gender) {
+    public Student(String name, String phone, int grade, int classNum, int gender, Certification certification) {
         this.name = name;
         this.phone = phone;
         this.grade = grade;
         this.classNum = classNum;
         this.gender = gender;
+        this.certification = certification;
     }
 
     public void updateStudent(Student student) {
@@ -61,5 +68,6 @@ public class Student {
         this.grade = student.getGrade();
         this.classNum = student.getClassNum();
         this.gender = student.getGender();
+        this.certification = student.getCertification();
     }
 }

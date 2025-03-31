@@ -3,6 +3,7 @@ package org.example.educlass.exam.service;
 import lombok.RequiredArgsConstructor;
 import org.example.educlass.exam.domain.Lecture;
 import org.example.educlass.exam.dto.LectureRequest;
+import org.example.educlass.exam.dto.LectureResponse;
 import org.example.educlass.exam.repository.LectureRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +18,26 @@ public class LectureService {
 
     // 강의 생성
     @Transactional
-    public Lecture createLecture(LectureRequest lectureRequest) {
-        return lectureRepository.save(lectureRequest.toEntity());
+    public LectureResponse createLecture(LectureRequest lectureRequest) {
+        Lecture lecture = lectureRepository.save(lectureRequest.toEntity());
+        return new LectureResponse(lecture);
     }
 
     @Transactional
-    public Lecture getLectureById(Long id) {
-        return lectureRepository.findById(id)
+    public LectureResponse getLectureById(Long id) {
+        Lecture lecture = lectureRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Lecture not found: " + id));
+
+        return new LectureResponse(lecture);
     }
 
     @Transactional
-    public List<Lecture> getAllLectures() {
-        return lectureRepository.findAll();
+    public List<LectureResponse> getAllLectures() {
+
+        return lectureRepository.findAll()
+                .stream()
+                .map(LectureResponse::new)
+                .toList();
     }
 
     @Transactional
@@ -38,11 +46,12 @@ public class LectureService {
     }
 
     @Transactional
-    public Lecture updateLecture(Long id, LectureRequest lectureRequest) {
+    public LectureResponse updateLecture(Long id, LectureRequest lectureRequest) {
         Lecture lecture = lectureRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Lecture not found: " + id));
 
         lecture.update(lectureRequest.getName(), lectureRequest.getLink(), lectureRequest.getChapter(), lectureRequest.getGrade());
-        return lecture;
+
+        return new LectureResponse(lectureRepository.save(lecture));
     }
 }

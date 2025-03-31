@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.educlass.ProblemSet.domain.Problem;
 import org.example.educlass.ProblemSet.domain.ProblemSet;
 import org.example.educlass.ProblemSet.repository.ProblemSetRepository;
-import org.example.educlass.ProblemSet.service.ProblemSetService;
 import org.example.educlass.exam.domain.Completed;
 import org.example.educlass.exam.domain.StudentExam;
 import org.example.educlass.exam.domain.StudentExamResult;
@@ -13,6 +12,7 @@ import org.example.educlass.exam.domain.StudentLecture;
 import org.example.educlass.exam.dto.StudentExamAnswerDto;
 import org.example.educlass.exam.dto.StudentExamMarkRequest;
 import org.example.educlass.exam.dto.StudentExamRequest;
+import org.example.educlass.exam.dto.StudentExamResponse;
 import org.example.educlass.exam.dto.StudentExamSubmissionDto;
 import org.example.educlass.exam.repository.StudentExamRepository;
 import org.example.educlass.exam.repository.StudentExamResultRepository;
@@ -30,13 +30,12 @@ import java.util.List;
 public class StudentExamService {
 
     private final StudentExamRepository studentExamRepository;
-    private final ProblemSetService problemSetService;
     private final StudentExamResultRepository studentExamResultRepository;
     private final StudentRepository studentRepository;
     private final StudentLectureRepository studentLectureRepository;
     private final ProblemSetRepository problemSetRepository;
 
-    public StudentExam createStudentExam(StudentExamRequest studentExamRequest) {
+    public StudentExamResponse createStudentExam(StudentExamRequest studentExamRequest) {
 
         StudentExam studentExam = new StudentExam();
         Student student = studentRepository.findById(studentExamRequest.getStudentId())
@@ -47,28 +46,44 @@ public class StudentExamService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid problemSetId: " + studentExamRequest.getProblemSetId()));
         studentExam.setCompleted(Completed.N);
 
-        return studentExamRepository.save(studentExamRequest.toEntity(student, studentLecture, problemSet));
+        studentExam.setStudent(student);
+        studentExam.setProblemSet(problemSet);
+        studentExam.setStudentLecture(studentLecture);
+        studentExamRepository.save(studentExam);
+
+        return new StudentExamResponse(studentExam);
     }
 
     @Transactional
     public void deleteStudentExam(Long id) {
-        StudentExam studentExam = getStudentExamById(id);
+        StudentExam studentExam = studentExamRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid studentId: " + id));
+
         studentExamRepository.delete(studentExam);
     }
 
-    public StudentExam getStudentExamById(Long id) {
-        return studentExamRepository.findById(id)
+    public StudentExamResponse getStudentExamById(Long id) {
+        StudentExam studentExam = studentExamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("StudentExam not found with id: " + id));
+
+        return new StudentExamResponse(studentExam);
     }
 
-    public List<StudentExam> getAllStudentExams() {
-        return studentExamRepository.findAll();
+    public List<StudentExamResponse> getAllStudentExams() {
+
+        return studentExamRepository.findAll()
+                .stream()
+                .map(StudentExamResponse::new)
+                .toList();
     }
 
     @Transactional
     public void processStudentExamSubmission(Long studentExamId, StudentExamSubmissionDto submissionDto) {
-        StudentExam studentExam = getStudentExamById(studentExamId);
-        ProblemSet problemSet = studentExam.getProblemSet();
+        StudentExam studentExam = studentExamRepository.findById(studentExamId)
+                .orElseThrow(() -> new EntityNotFoundException("StudentExam not found with id: " + studentExamId));
+        ProblemSet problemSet = problemSetRepository.findById(studentExam.getProblemSet().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid problemSetId: " + studentExam.getProblemSet().getId()));
+
         int score = 0;
         List<StudentExamResult> examResults = new ArrayList<>();
 
@@ -100,7 +115,8 @@ public class StudentExamService {
 
     @Transactional
     public void markStudentExam(Long id, StudentExamMarkRequest request) {
-        StudentExam studentExam = getStudentExamById(id);
+        StudentExam studentExam = studentExamRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("StudentExam not found with id: " + id));
         List<StudentExamResult> examResults = studentExam.getStudentExamResults();
 
         for (StudentExamAnswerDto studentAnswer : request.getStudentAnswers()) {
@@ -111,5 +127,12 @@ public class StudentExamService {
 
         studentExamRepository.save(studentExam);
         studentExamResultRepository.saveAll(examResults);
+    }
+
+    public StudentExamResponse findByStudentIdAndStudentLectureId(Long studentId, Long studentLectureId) {
+        StudentExam studentExam = studentExamRepository.findByStudentIdAndStudentLectureId(studentId, studentLectureId)
+                .orElseThrow(() -> new EntityNotFoundException("StudentExam not found with id: " + studentId));
+
+        return new StudentExamResponse(studentExam);
     }
 }
