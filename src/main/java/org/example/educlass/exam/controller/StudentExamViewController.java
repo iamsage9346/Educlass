@@ -32,14 +32,11 @@ public class StudentExamViewController {
                                  @PathVariable Long studentLectureId,
                                  Model model) {
 
-        // 1. studentId와 lectureId로 StudentExam 조회
         StudentExamResponse studentExam = studentExamService.findByStudentIdAndStudentLectureId(studentId, studentLectureId);
 
-        // 2. 연결된 ProblemSet 가져오기
         Long problemSetId = studentExam.getProblemSetId();
         ProblemSetResponse problemSet = problemSetService.findProblemSetById(problemSetId);
 
-        // 3. 모델에 담기
         model.addAttribute("studentExam", studentExam);
         model.addAttribute("problemSet", problemSet);
 

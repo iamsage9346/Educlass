@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-// Test라는 어휘 자체를 싹 없애기, 변수명 클라스명
 @Tag(name = "StudentExam API", description = "학생당 시험 관련 API")
 @RestController
 @RequiredArgsConstructor

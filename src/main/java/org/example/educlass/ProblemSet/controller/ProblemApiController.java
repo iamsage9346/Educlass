@@ -23,10 +23,6 @@ import java.util.List;
 @RestController
 public class ProblemApiController {
 
-    // 컨트롤러에서 하지말아야 할 것 : 비즈니스 로직이 들어가는것을 권장하지 않는다.
-    // EndPoint - API를 호출하는 시점
-    // get요청을 가장 많이 만든다.
-
     private final ProblemService problemService;
 
     @Operation(summary = "문제 생성", description = "새로운 문제를 생성합니다.")

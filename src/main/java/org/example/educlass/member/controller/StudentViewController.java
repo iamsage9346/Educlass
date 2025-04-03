@@ -17,22 +17,13 @@ public class StudentViewController {
 
     private final StudentService studentService;
 
-//    @GetMapping("/students")
-//    public String getAllStudents(Model model) {
-//        List<StudentListViewResponse> students = studentService.findAllStudents().stream()
-//                .map(StudentListViewResponse::new)
-//                .toList();
-//        model.addAttribute("students", students);
-//        return "studentList";
-//    }
 
     @GetMapping("/students/{id}")
     public String getStudentById(@PathVariable() Long id, Model model) {
         Student student = studentService.getStudentById(id);
         model.addAttribute("student", new StudentListViewResponse(student));
 
-        return "student";
-
+        return "teacher/student";
     }
 
     @GetMapping("/students")
